@@ -5,20 +5,49 @@
     box-sizing: border-box;
 }
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
+    overflow-x: hidden;
 }
 
 /* Navigation */
 nav {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+nav:hover {
+    background: rgba(255, 255, 255, 0.98);
 }
 
 .nav-content {
@@ -33,7 +62,10 @@ nav {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #2c3e50;
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: slideInFromLeft 0.5s ease-out;
 }
 
 .nav-links {
@@ -46,11 +78,28 @@ nav {
     text-decoration: none;
     color: #2c3e50;
     font-weight: 500;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background: linear-gradient(45deg, #3498db, #2ecc71);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
 }
 
 .nav-links a:hover {
     color: #3498db;
+    transform: translateY(-2px);
 }
 
 /* Hero section */
@@ -60,24 +109,56 @@ nav {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: #f8f9fa;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://cdn.pixabay.com/photo/2017/02/19/23/11/network-2081073_1280.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     padding-top: 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.8));
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 1s ease-out;
 }
 
 .hero-content h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
-    color: #2c3e50;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .hero-content p {
-    font-size: 1.2rem;
-    color: #666;
+    font-size: 1.3rem;
+    color: #f8f9fa;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 /* Sections */
 section {
     padding: 5rem 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+}
+
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 section h2 {
@@ -85,11 +166,23 @@ section h2 {
     font-size: 2.5rem;
     margin-bottom: 3rem;
     color: #2c3e50;
+    position: relative;
+}
+
+section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(45deg, #3498db, #2ecc71);
 }
 
 /* About section */
 .about {
-    background-color: #fff;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
 }
 
 .about-content {
@@ -100,6 +193,7 @@ section h2 {
 .bio {
     font-size: 1.1rem;
     margin-bottom: 2rem;
+    line-height: 1.8;
 }
 
 .skills-list {
@@ -111,15 +205,23 @@ section h2 {
 }
 
 .skills-list li {
-    background-color: #e9ecef;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    background: linear-gradient(45deg, #3498db, #2ecc71);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 25px;
     font-size: 0.9rem;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.skills-list li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
 /* Projects section */
 .projects {
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
 }
 
 .projects-grid {
@@ -131,15 +233,23 @@ section h2 {
 }
 
 .project-card {
-    background-color: #fff;
+    background: rgba(255, 255, 255, 0.9);
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .project-card h3 {
     margin-bottom: 1rem;
     color: #2c3e50;
+    font-size: 1.5rem;
 }
 
 .project-links {
@@ -152,15 +262,21 @@ section h2 {
     text-decoration: none;
     color: #3498db;
     font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border: 2px solid #3498db;
+    border-radius: 25px;
 }
 
 .project-link:hover {
-    text-decoration: underline;
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
 }
 
 /* Contact section */
 .contact {
-    background-color: #fff;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
 }
 
 .contact-content {
@@ -180,17 +296,24 @@ section h2 {
     text-decoration: none;
     color: #3498db;
     font-weight: 500;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    border: 2px solid #3498db;
 }
 
 .contact-link:hover {
-    text-decoration: underline;
+    background: #3498db;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
 /* Footer */
 footer {
     text-align: center;
     padding: 2rem;
-    background-color: #2c3e50;
+    background: linear-gradient(45deg, #2c3e50, #3498db);
     color: #fff;
 }
 
